@@ -8,6 +8,7 @@ scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play" % "2.4.6",
+  "com.google.code.gson" % "gson" % "2.2.4",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
 
