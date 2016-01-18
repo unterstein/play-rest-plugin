@@ -1,19 +1,22 @@
 package restplugin
 
+import javax.inject.{Singleton, Inject}
+
+import play.api.inject.ApplicationLifecycle
+import play.api.routing.Router
+
+//import scala.concurrent.Future
+
+
 /**
  * @author Johannes Unterstein (unterstein@me.com)
  */
+@Singleton
+class RestPlugin @Inject()(lifecycle: ApplicationLifecycle, router: Router) {
 
-import play.api.{Plugin, Application}
+  println(router.routes)
 
-class RestPlugin(application: Application) extends Plugin {
-
-  override def onStart() = {
-  }
-
-  override def onStop() = {
-  }
-
-  override def enabled = true
+  // TODO maybe register stop hook
+  //  lifecycle.addStopHook(() => Future.successful())
 }
 
