@@ -1,4 +1,4 @@
-name := """play-2.4-rest-plugin-template"""
+name := "play-2.4-rest-plugin-template"
 
 version := "1.0-SNAPSHOT"
 
