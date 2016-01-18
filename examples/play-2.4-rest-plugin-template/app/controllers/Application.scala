@@ -1,12 +1,11 @@
 package controllers
 
-import play.api.mvc._
 import restplugin.RestActions
 
 class Application extends RestActions {
 
-  def index = Action {
-    implicit request =>
+  def index = RESTAction() {
+    implicit request => // : RESTRequest[NoEntityNeeded]
       Ok("ok")
   }
 
