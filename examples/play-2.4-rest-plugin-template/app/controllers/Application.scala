@@ -1,8 +1,10 @@
 package controllers
 
-import restplugin.RestActions
+import javax.inject.Inject
 
-class Application extends RestActions {
+import restplugin.{RestPlugin, RestActions}
+
+class Application @Inject()(plugin: RestPlugin) extends RestActions {
 
   def index = RESTAction() {
     implicit request =>
