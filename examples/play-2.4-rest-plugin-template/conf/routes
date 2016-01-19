@@ -3,5 +3,6 @@
 # ~~~~
 
 # Home page
-GET        /           controllers.Application.index
-PUT        /:id        controllers.Application.examplePut(id: Long)
+GET         /           controllers.Application.index
+PUT         /:id        controllers.Application.examplePut(id: Long)
+POST        /:id        controllers.Application.examplePost(id: Long)
