@@ -7,8 +7,8 @@ import scala.annotation.StaticAnnotation
  */
 object Annotations {
 
-  class RESTRequired(requiredClass: Option[Class]) extends StaticAnnotation
+  class RESTRequired[T](requiredClass: Option[Class[T]]) extends StaticAnnotation
 
-  class RESTProduces(producesClass: Option[Class]) extends StaticAnnotation
+  class RESTProduces[T](producesClass: Option[Class[T]]) extends StaticAnnotation
 
 }
