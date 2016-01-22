@@ -7,14 +7,14 @@ import play.api.mvc._
  */
 trait RestActions extends Controller {
 
-  def RESTAction[T](requiredClass: Option[Class[T]] = Some(classOf[NoEntityNeeded]), objectRequired: Boolean = false)(f: RESTRequest[AnyContent, _ >: T] => Result) = Action {
+  def RESTAction[T](inputClass: Option[Class[T]] = Some(classOf[NoEntityNeeded]), inputObjectRequired: Boolean = false)(f: RESTRequest[AnyContent, _ >: T] => Result) = Action {
     implicit request =>
-      val givenObject = if (requiredClass.isDefined && requiredClass.get != classOf[NoEntityNeeded]) {
-        Serializer.fromRequest(request, requiredClass.get)
+      val givenObject = if (inputClass.isDefined && inputClass.get != classOf[NoEntityNeeded]) {
+        Serializer.fromRequest(request, inputClass.get)
       } else {
         None
       }
-      if (objectRequired && givenObject.isEmpty) {
+      if (inputObjectRequired && givenObject.isEmpty) {
         BadRequest("Entity missing")
       } else {
         f(RESTRequest(givenObject, request))
