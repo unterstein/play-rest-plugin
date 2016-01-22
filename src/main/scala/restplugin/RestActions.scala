@@ -7,9 +7,9 @@ import play.api.mvc._
  */
 trait RestActions extends Controller {
 
-  def RESTAction[T](inputClass: Option[Class[T]] = Some(classOf[NoEntityNeeded]), inputObjectRequired: Boolean = false)(f: RESTRequest[AnyContent, _ >: T] => Result) = Action {
+  def RESTAction[I, O](inputClass: Option[Class[I]] = Some(classOf[NoClassGiven]), inputObjectRequired: Boolean = false)(f: RESTRequest[AnyContent, _ >: I] => Result) = Action {
     implicit request =>
-      val givenObject = if (inputClass.isDefined && inputClass.get != classOf[NoEntityNeeded]) {
+      val givenObject = if (inputClass.isDefined && inputClass.get != classOf[NoClassGiven]) {
         Serializer.fromRequest(request, inputClass.get)
       } else {
         None
@@ -23,6 +23,6 @@ trait RestActions extends Controller {
 
   case class RESTRequest[A, C](givenObject: Option[C], request: Request[A]) extends WrappedRequest[A](request)
 
-  case class NoEntityNeeded()
+  case class NoClassGiven()
 
 }
