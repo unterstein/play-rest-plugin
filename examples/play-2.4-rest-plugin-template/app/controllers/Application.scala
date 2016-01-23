@@ -16,9 +16,11 @@ class Application @Inject()(plugin: RestPlugin) extends RestActions {
       Ok(s"ok: $id ${request.givenObject}")
   }
 
-  def examplePost(id: Long) = RESTAction() {
+  def examplePost(id: Long) = RESTAction(Some(Class[ExampleUser]), objectRequired = true) {
     implicit request =>
       Ok(s"ok: $id ${request.givenObject}")
   }
+
+  case class ExampleUser(id: Long, name: String)
 
 }

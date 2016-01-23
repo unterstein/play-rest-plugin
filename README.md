@@ -29,7 +29,14 @@ libraryDependencies += "com.github.unterstein" %% "play-rest-plugin" % "0.1.0"
 
 ## Usage
 
-TODO
+```scala
+  def examplePost(id: Long) = RESTAction(Some(Class[ExampleUser]), objectRequired = true) {
+    implicit request =>
+      Ok(s"ok: $id ${request.givenObject}")
+  }
+
+  case class ExampleUser(id: Long, name: String)
+```
 
 ## TODO
 
