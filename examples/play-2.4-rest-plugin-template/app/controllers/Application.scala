@@ -14,7 +14,7 @@ class Application extends RestActions {
       Ok(s"ok: $id ${request.givenObject}")
   }
 
-  def examplePost(id: Long) = RESTAction(Some(Class[ExampleUser]), objectRequired = true) {
+  def examplePost(id: Long) = RESTAction(Some(classOf[ExampleUser]), inputObjectRequired = true) {
     implicit request =>
       Ok(s"ok: $id ${request.givenObject}")
   }
