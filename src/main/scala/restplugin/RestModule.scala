@@ -35,7 +35,12 @@ class RestModule(private val router: Router) extends Actor with ActorLogging {
     case "init" =>
       try {
         val documentation = router.documentation
-        // TODO do introspection
+        documentation.foreach {
+          case (method: String, path: String, action: String) =>
+            val className = StringUtils.substringBeforeLast(action, ".")
+            val methodName = StringUtils.substringBefore(StringUtils.remove(action, s"$className."), "(")
+            println(s"class: $className, method: $methodName")
+        }
       } catch {
         case o_O: IllegalStateException =>
           if (StringUtils.contains(o_O.getMessage, "Please wait until")) {
