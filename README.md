@@ -41,6 +41,7 @@ libraryDependencies += "com.github.unterstein" %% "play-rest-plugin" % "0.1.0"
 ## TODO
 
 * Enable route scanning and validation
+* Enable basic auth and other authentication methods
 
 
 ## Old Versions
