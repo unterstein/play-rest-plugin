@@ -1,8 +1,6 @@
 package controllers
 
-import javax.inject.Inject
-
-import restplugin.{RestPlugin, RestActions}
+import restplugin.RestActions
 
 class Application extends RestActions {
 
