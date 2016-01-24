@@ -7,6 +7,9 @@ import play.api.mvc._
  */
 trait RestActions extends Controller {
 
+  // reference to RestModule
+  private val module = RestModule
+
   def RESTAction[I, O](inputClass: Option[Class[I]] = Some(classOf[NoClassGiven]), inputObjectRequired: Boolean = false)(f: RESTRequest[AnyContent, _ >: I] => Result) = Action {
     implicit request =>
       val givenObject = if (inputClass.isDefined && inputClass.get != classOf[NoClassGiven]) {
