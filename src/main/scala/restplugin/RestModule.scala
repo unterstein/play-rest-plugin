@@ -4,6 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import akka.actor.{Actor, ActorLogging, Props}
 import org.apache.commons.lang3.StringUtils
+import play.api.Play
 import play.api.inject.ApplicationLifecycle
 import play.api.routing.Router
 import play.libs.Akka
@@ -18,28 +19,17 @@ import scala.concurrent.duration._
  * @author Johannes Unterstein (unterstein@me.com)
  */
 
-@Singleton
-class RestPlugin @Inject()(lifecycle: ApplicationLifecycle, router: Router) {
-  // TODO maybe register stop hook
-  //  lifecycle.addStopHook(() => Future.successful())
+object RestModule {
+
+  tryInit(Play.current.routes)
 
 
-  // in order to avoid following exception:
-  // -> Caused by: java.lang.IllegalStateException: This is a proxy used to support circular references. The object we're proxying is not constructed yet. Please wait until after injection has completed to use this object.
-  // we do this a little bit lazy here
+  private def tryInit(router: Router) = Akka.system.scheduler.scheduleOnce(25.milliseconds, Akka.system.actorOf(props(router)), "init")
 
-  RestPluginInitializer.tryInit(router)
-
+  private def props(router: Router) = Props(classOf[RestModule], router)
 }
 
-object RestPluginInitializer {
-
-  def tryInit(router: Router) = Akka.system.scheduler.scheduleOnce(25.milliseconds, Akka.system.actorOf(props(router)), "init")
-
-  def props(router: Router) = Props(classOf[RestPluginInitializer], router)
-}
-
-class RestPluginInitializer(private val router: Router) extends Actor with ActorLogging {
+class RestModule(private val router: Router) extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case "init" =>
@@ -49,11 +39,11 @@ class RestPluginInitializer(private val router: Router) extends Actor with Actor
       } catch {
         case o_O: IllegalStateException =>
           if (StringUtils.contains(o_O.getMessage, "Please wait until")) {
-            RestPluginInitializer.tryInit(router)
+            RestModule.tryInit(router)
           } else {
             throw o_O
           }
-        case o_O: _ =>
+        case o_O: Exception =>
           throw o_O
       }
 
