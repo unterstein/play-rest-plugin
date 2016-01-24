@@ -4,7 +4,7 @@ import javax.inject.Inject
 
 import restplugin.{RestPlugin, RestActions}
 
-class Application @Inject()(plugin: RestPlugin) extends RestActions {
+class Application extends RestActions {
 
   def index = RESTAction() {
     implicit request =>
