@@ -38,6 +38,15 @@ libraryDependencies += "com.github.unterstein" %% "play-rest-plugin" % "0.1.0"
   case class ExampleUser(id: Long, name: String)
 ```
 
+If you want to configure something, you could use this:
+
+```
+restplugin.mode=strict
+```
+
+If plugin is in strict mode, it checks on startup if all defined routes are subtypes of the RESTAction.
+
+
 ## TODO
 
 * Enable route scanning and validation

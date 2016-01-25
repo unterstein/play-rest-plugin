@@ -38,7 +38,7 @@ class RestModule(private val router: Router) extends Actor with ActorLogging {
         val documentation = router.documentation
         val config = ConfigFactory.load
         val playClassLoader = Play.classloader(Play.current)
-        val configMode = config.getString("rest.mode")
+        val configMode = config.getString("restplugin.mode")
 
         documentation.foreach {
           case (method: String, path: String, action: String) =>
