@@ -2,6 +2,7 @@ package restplugin
 
 
 import akka.actor.{Actor, ActorLogging, Props}
+import com.typesafe.config.ConfigFactory
 import org.apache.commons.lang3.StringUtils
 import play.api.Play
 import play.api.routing.Router
@@ -35,16 +36,25 @@ class RestModule(private val router: Router) extends Actor with ActorLogging {
     case "init" =>
       try {
         val documentation = router.documentation
+        val config = ConfigFactory.load
+        val playClassLoader = Play.classloader(Play.current)
+        val configMode = config.getString("rest.mode")
+
         documentation.foreach {
           case (method: String, path: String, action: String) =>
             val className = StringUtils.substringBeforeLast(action, ".")
             val methodName = StringUtils.substringBefore(StringUtils.remove(action, s"$className."), "(")
-            val playClassLoader = Play.classloader(Play.current)
+
 
             Logger.info(s"Play-Rest-Plugin scans: class[$className], method[$methodName]")
             try {
               // oh yeah, play needs some extra sausages...
               val clazz = Class.forName(className, false, playClassLoader)
+              if (clazz.isInstanceOf[RestActions] == false) {
+                if (StringUtils.equals(configMode, "strict")) {
+                  throw new IllegalArgumentException("Play-Rest-Plugin in mode=strict forbids to not use RESTActions")
+                }
+              }
               // play controller has the conversion, that method names must be unique
               val method = clazz.getMethods.filter(m => m.getName == methodName)(0)
               println(s"$method")
