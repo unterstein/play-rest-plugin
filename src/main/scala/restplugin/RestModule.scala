@@ -1,16 +1,16 @@
 package restplugin
 
-import javax.inject.{Inject, Singleton}
 
 import akka.actor.{Actor, ActorLogging, Props}
 import org.apache.commons.lang3.StringUtils
 import play.api.Play
-import play.api.inject.ApplicationLifecycle
 import play.api.routing.Router
 import play.libs.Akka
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
+import play.api.Logger
+import scala.collection.JavaConversions._
 
 //import scala.concurrent.Future
 
@@ -39,7 +39,19 @@ class RestModule(private val router: Router) extends Actor with ActorLogging {
           case (method: String, path: String, action: String) =>
             val className = StringUtils.substringBeforeLast(action, ".")
             val methodName = StringUtils.substringBefore(StringUtils.remove(action, s"$className."), "(")
-            println(s"class: $className, method: $methodName")
+            val playClassLoader = Play.classloader(Play.current)
+
+            Logger.info(s"Play-Rest-Plugin scans: class[$className], method[$methodName]")
+            try {
+              // oh yeah, play needs some extra sausages...
+              val clazz = Class.forName(className, false, playClassLoader)
+              // play controller has the conversion, that method names must be unique
+              val method = clazz.getMethods.filter(m => m.getName == methodName)(0)
+              println(s"$method")
+            } catch {
+              case o_O: Exception =>
+                Logger.error(s"Can not introspect $className#$methodName", o_O)
+            }
         }
       } catch {
         case o_O: IllegalStateException =>
