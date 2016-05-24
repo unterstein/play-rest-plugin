@@ -7,8 +7,8 @@ organization := "com.github.unterstein"
 scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play" % "2.4.6",
-  "com.google.code.gson" % "gson" % "2.2.4",
+  "com.typesafe.play" %% "play" % "2.5.3",
+  "com.google.code.gson" % "gson" % "2.6.2",
   "org.apache.commons" % "commons-lang3" % "3.4",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
